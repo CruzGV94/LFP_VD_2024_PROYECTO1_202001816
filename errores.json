@@ -1,0 +1,32 @@
+{
+  "errores": [
+    {
+      "No": 1,
+      "descripcion": {
+        "tipo": "Error Lexico",
+        "columna": 1,
+        "fila": 1,
+        "mensaje": "El valor en'operaciones[0].valor2' no es válido."
+      }
+    },
+    {
+      "No": 2,
+      "descripcion": {
+        "tipo": "Error Lexico",
+        "columna": 1,
+        "fila": 2,
+        "mensaje": "El valor en'operaciones[1].valor1' no es válido."
+      }
+    },
+    {
+      "No": 3,
+      "descripcion": {
+        "lexema": "cadena invalida",
+        "tipo": "Error Lexico",
+        "columna": 1,
+        "fila": 3,
+        "mensaje": "El valor en'operaciones[2].valor1' no es válido."
+      }
+    }
+  ]
+}

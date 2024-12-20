@@ -1,0 +1,14 @@
+{
+  "name": "proyecto1",
+  "version": "1.0.0",
+  "description": "proyecto 1 lenguajes formales",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Cruz GV",
+  "license": "ISC",
+  "dependencies": {
+    "graphviz": "^0.0.9"
+  }
+}

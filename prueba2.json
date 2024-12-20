@@ -1,0 +1,23 @@
+{
+    "operaciones": [
+       {
+          "operacion": "suma",
+          "valor1": 4.5
+       },
+       {
+          "operacion": "resta",
+          "valor2": [
+             {
+                "operacion": "potencia",
+                "valor1": 10,
+                "valor2": 3
+             }
+          ]
+       },
+       {
+          "operacion": "suma",
+          "valor1": "cadena invalida",
+          "valor2": 5.32
+       }
+    ]
+ }
