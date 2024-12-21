@@ -3,16 +3,14 @@ const fs = require('fs');
 const path = require('path');
 const { log } = require('console');
 const { exec } = require('child_process');
-const { graph } = require('graphviz');
 // variables globales 
 const errores = [];
 let numeroError = 1; // inicializar el contador de errores
-
 let contenidoArchivo = ''; // Guarda el contenido del archivo, para usarlo despues :p
 
 const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
+    input: process.stdin, // Es para leer la entrada del usuario
+    output: process.stdout // Es para mostrar la salida en consola
 });
 
 function mostrarMenu() {
@@ -328,10 +326,10 @@ function generarDiagrama() {
         }
 
         // Configuración para estilos desde el JSON
-        const coloresPermitidos = { 
-            rojo: 'red', 
-            azul: 'blue', 
-            negro: 'black' 
+        const coloresPermitidos = {
+            rojo: 'red',
+            azul: 'blue',
+            negro: 'black'
         };
         const config = data.configuraciones ? data.configuraciones[0] : {};
         const fondo = coloresPermitidos[config.fondo.toLowerCase()] || 'red';
@@ -348,24 +346,24 @@ function generarDiagrama() {
         function procesarOperacion(operacion, parentNode = null) {
             if (!operacion.operacion) {
                 console.log('Operación no válida encontrada:', operacion);
-                return;
+                return null;
             }
 
-            // funcion para calcular los resultados 
-            function calcularResultados(op, valor1, valor2){
-                switch(op.toLowerCase()){
+            // Función para calcular los resultados
+            function calcularResultados(op, valor1, valor2) {
+                switch (op.toLowerCase()) {
                     case 'suma':
-                        return valor1 + valor2;
+                        return valor1 + (valor2 || 0);
                     case 'resta':
-                        return valor1 - valor2;
+                        return valor1 - (valor2 || 0);
                     case 'multiplicacion':
-                        return valor1 * valor2;
+                        return valor1 * (valor2 || 1);
                     case 'division':
                         return valor2 !== 0 ? valor1 / valor2 : "infinito";
                     case 'potencia':
-                        return Math.pow(valor1, valor2);
+                        return Math.pow(valor1, valor2 || 1);
                     case 'raiz':
-                        return Math.pow(valor1, 1 / valor2);
+                        return Math.pow(valor1, 1 / valor2 || 1);
                     case 'inverso':
                         return valor1 !== 0 ? 1 / valor1 : "infinito";
                     case 'seno':
@@ -381,52 +379,58 @@ function generarDiagrama() {
                 }
             }
 
-            function obtenerValor(valor){
-                if (typeof valor === 'object' && !Array.isArray(valor)){
+            function obtenerValor(valor) {
+                if (typeof valor === 'object' && !Array.isArray(valor)) {
                     return procesarOperacion(valor);
-                }else if (Array.isArray(valor)){
-                    return valor.map(obtenerValor).reduce((a,b) => a + b, 0);
-                }else{
+                } else if (Array.isArray(valor)) {
+                    return valor
+                        .map(obtenerValor)
+                        .reduce((a, b) => a + b, 0);
+                } else {
                     return valor;
                 }
             }
 
             const valor1 = obtenerValor(operacion.valor1);
             const valor2 = operacion.valor2 !== undefined ? obtenerValor(operacion.valor2) : null;
+
             const resultado = calcularResultados(operacion.operacion, valor1, valor2);
 
+            if (resultado === null) {
+                console.log("Operación no soportada:", operacion.operacion);
+            }
 
             const currentId = `node${nodeId++}`;
-            const label = operacion.operacion.toUpperCase();
+            const label = `${operacion.operacion.toUpperCase()}\\nResultado: ${resultado}`;
             graphContent += `${currentId} [label="${label}"];\n`;
 
-            // Conectar el nodo actual al nodo padre si aplica
             if (parentNode) {
                 graphContent += `${parentNode} -> ${currentId};\n`;
             }
 
-            function procesarValor(valor, parentId) {
-                if (typeof valor === 'object' && !Array.isArray(valor)) {
-                    procesarOperacion(valor, parentId);
-                } else if (Array.isArray(valor)) {
-                    valor.forEach((item) => procesarValor(item, parentId));
-                } else {
-                    const valueId = `node${nodeId++}`;
-                    const label = `${operacion.operacion.toUpperCase()}\\n${resultado}`
-                    graphContent += `${currentId} [label="${label}"];\n`;
-                    graphContent += `${valueId} [label="${valor}"];\n`;
-                    graphContent += `${parentId} -> ${valueId};\n`;
-                }
-            }
-
-            // Procesar valor1
+            // Procesar valores recursivamente
             if (operacion.valor1 !== undefined) {
                 procesarValor(operacion.valor1, currentId);
             }
 
-            // Procesar valor2 si existe
             if (operacion.valor2 !== undefined) {
                 procesarValor(operacion.valor2, currentId);
+            }
+
+            return resultado;
+        }
+
+        function procesarValor(valor, parentId) {
+            if (typeof valor === 'object' && !Array.isArray(valor)) {
+                procesarOperacion(valor, parentId);
+            } else if (Array.isArray(valor)) {
+                valor.forEach((item) => procesarValor(item, parentId));
+            } else {
+                const valueId = `node${nodeId++}`;
+                graphContent += `${valueId} [label="${valor}"];\n`;
+                if (parentId) {
+                    graphContent += `${parentId} -> ${valueId};\n`;
+                }
             }
         }
 
@@ -452,13 +456,15 @@ function generarDiagrama() {
             }
             console.log('Diagrama generado exitosamente en "operaciones.png".');
         });
-        
 
     } catch (err) {
         console.log('Error al generar el diagrama. Verifica que el archivo sea un JSON válido.');
         console.log(`Detalles del error: ${err.message}`);
     }
-}
+} // fin de la funcion generarDiagrama
+
+//************************************************************* tabla de tokens *************************************** */
+
 
     class Token {
         constructor(token, lexema, linea, columna) {

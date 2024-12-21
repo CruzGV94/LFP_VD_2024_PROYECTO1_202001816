@@ -28,8 +28,8 @@
         }, 
         {
             "operacion": "multiplicacion",
-            "valor11": 7,
-            "valor22": 3
+            "valor1": 7,
+            "valor2": 3
         }, 
         {
             "operacion": "division",
