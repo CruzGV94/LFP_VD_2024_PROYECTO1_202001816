@@ -114,7 +114,7 @@ El programa realizado en Visual Studio Code, funciona con el sistema operativo W
 * Procesador: Intel core Celeron. 
 * Memoria RAM: 1GB. 
 * Resolucion de pantalla: 1280x720 pixeles
-### Expresion regular asociada 
+### Expresión Regular Asociada 
 \{
 \s*"operaciones"\s*:\s*\[
 \s*(\{
@@ -123,7 +123,7 @@ El programa realizado en Visual Studio Code, funciona con el sistema operativo W
 \s*(\{
 \s*"texto"\s*:\s*"([a-zA-Z]+)"\s*,\s*"fondo"\s*:\s*"([a-zA-Z]+)"\s*,\s*"fuente"\s*:\s*"([a-zA-Z]+)"\s*,\s*"forma"\s*:\s*"([a-zA-Z]+)"\s*\}\s*\]
 \}
-### Metodo del Arbol 
+### Método del Árbol 
 ![arbol](/capturas/ArbolER.jpg)
 ### AFD
 ![AFD](/capturas/AFD.png)
